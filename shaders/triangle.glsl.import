@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://yr5c8s4dlwdj"
+path="res://.godot/imported/triangle.glsl-b616c823edf3baf52338549dd34a56c2.res"
+
+[deps]
+
+source_file="res://shaders/triangle.glsl"
+dest_files=["res://.godot/imported/triangle.glsl-b616c823edf3baf52338549dd34a56c2.res"]
+
+[params]
+

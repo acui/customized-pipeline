@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://b3qmcb5x2xcpu"]
+
+[ext_resource type="Script" path="res://scripts/customized_pipeline.gd" id="1_wbnqv"]
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_w1ea1"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_wbnqv")
+
+[sub_resource type="Compositor" id="Compositor_32tka"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_w1ea1")])
+
+[sub_resource type="Environment" id="Environment_vup13"]
+background_mode = 1
+ambient_light_source = 1
+reflected_light_source = 1
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.317765, 0.496541, 1.99051)
+compositor = SubResource("Compositor_32tka")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vup13")
