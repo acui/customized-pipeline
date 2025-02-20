@@ -2,3 +2,8 @@
 .godot/
 .vscode/
 /android/
+*.exe
+*.pck
+*.rdc
+export_presets.cfg
+
