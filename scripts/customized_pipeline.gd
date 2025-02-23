@@ -168,7 +168,7 @@ func _render_callback(callback_type: int, render_data: RenderData) -> void:
 
 			rd.draw_command_begin_label("Draw a triangle", Color(1.0, 1.0, 1.0, 1.0))
 
-			var draw_list = rd.draw_list_begin(screen_buffer, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_STORE, RenderingDevice.INITIAL_ACTION_LOAD,RenderingDevice.FINAL_ACTION_STORE, clear_colors)
+			var draw_list = rd.draw_list_begin(screen_buffer, RenderingDevice.DRAW_CLEAR_COLOR_0, clear_colors)
 			rd.draw_list_bind_render_pipeline(draw_list, pipeline)
 			rd.draw_list_bind_vertex_array(draw_list, vertex_array)
 			rd.draw_list_draw(draw_list, false, 1, 0)

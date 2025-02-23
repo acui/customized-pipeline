@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b3qmcb5x2xcpu"]
 
-[ext_resource type="Script" path="res://scripts/customized_pipeline.gd" id="1_wbnqv"]
+[ext_resource type="Script" uid="uid://dhpaqqyj8hduk" path="res://scripts/customized_pipeline.gd" id="1_wbnqv"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_w1ea1"]
 resource_local_to_scene = false
