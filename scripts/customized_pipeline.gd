@@ -13,10 +13,9 @@ var image_texture: RID
 var depth_texture: RID
 var screen_buffer: RID
 
-func _initialize_rendering():
+func _initialize_rendering(renderscene_buffers: RenderSceneBuffersRD):
 	rd = RenderingServer.get_rendering_device()
-	if !rd:
-		return
+
 	# Loads a shader file and compiles it to SPIR-V format, then creates a shader resource from the compiled SPIR-V.
 	var shader_file: RDShaderFile = load("res://shaders/triangle.glsl")
 	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
@@ -117,11 +116,15 @@ func _initialize_rendering():
 	color_blend_state.attachments.push_back(color_attachment)
 	color_blend_state.enable_logic_op = false
 	color_blend_state.logic_op = RenderingDevice.LOGIC_OP_COPY
-	
-	# Get the screen framebuffer format for output.
-	var fb_format = rd.screen_get_framebuffer_format()
 
-	# Create the render pipeline with the above states.
+	# Initialize the frame buffer for rendering
+	image_texture = renderscene_buffers.get_color_texture()
+	depth_texture = renderscene_buffers.get_depth_texture()
+	screen_buffer = rd.framebuffer_create([image_texture, depth_texture])
+
+	# Get the framebuffer format
+	var fb_format = rd.framebuffer_get_format(screen_buffer)
+
 	pipeline = rd.render_pipeline_create(
 		shader, fb_format, vertex_format, rd.RENDER_PRIMITIVE_TRIANGLES,
 		rasterization_state, multisample_state, stencil_state, color_blend_state, 
@@ -131,11 +134,12 @@ func _initialize_rendering():
 	
 func _init():
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
-	RenderingServer.call_on_render_thread(_initialize_rendering)
 	
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
+			if !rd:
+				return
 			if shader.is_valid():
 				rd.free_rid(shader)
 			if vertex_array.is_valid():
@@ -148,23 +152,26 @@ func _notification(what: int) -> void:
 				rd.free_rid(screen_buffer)
 			
 func _render_callback(callback_type: int, render_data: RenderData) -> void:
-	if rd and callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT:
+	if callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT:
 		var render_scene_buffers : RenderSceneBuffersRD = render_data.get_render_scene_buffers()
 
 		if render_scene_buffers:
 			var size = render_scene_buffers.get_internal_size()
 			if size.x == 0 and size.y == 0:
 				return
-			var new_image_texture = render_scene_buffers.get_color_texture()
-			var new_depth_texture = render_scene_buffers.get_depth_texture()
-			if new_image_texture != image_texture or new_depth_texture != depth_texture:
-				image_texture = new_image_texture
-				depth_texture = new_depth_texture
-				if rd.framebuffer_is_valid(screen_buffer):
-					rd.free_rid(screen_buffer)
-				# Creates a framebuffer object (FBO) that encapsulates the color and depth textures.
-				# The FBO is used as the target for rendering operations
-				screen_buffer = rd.framebuffer_create([image_texture, depth_texture])
+			if !rd:
+				_initialize_rendering(render_scene_buffers)
+			else:
+				var new_image_texture = render_scene_buffers.get_color_texture()
+				var new_depth_texture = render_scene_buffers.get_depth_texture()
+				if new_image_texture != image_texture or new_depth_texture != depth_texture:
+					image_texture = new_image_texture
+					depth_texture = new_depth_texture
+					if rd.framebuffer_is_valid(screen_buffer):
+						rd.free_rid(screen_buffer)
+					# Creates a framebuffer object (FBO) that encapsulates the color and depth textures.
+					# The FBO is used as the target for rendering operations
+					screen_buffer = rd.framebuffer_create([image_texture, depth_texture])
 
 			rd.draw_command_begin_label("Draw a triangle", Color(1.0, 1.0, 1.0, 1.0))
 
