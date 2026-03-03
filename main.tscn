@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3qmcb5x2xcpu"]
+[gd_scene format=3 uid="uid://b3qmcb5x2xcpu"]
 
 [ext_resource type="Script" uid="uid://dhpaqqyj8hduk" path="res://scripts/customized_pipeline.gd" id="1_wbnqv"]
 
@@ -19,11 +19,11 @@ background_mode = 1
 ambient_light_source = 1
 reflected_light_source = 1
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=2011739484]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1118940072]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.317765, 0.496541, 1.99051)
 compositor = SubResource("Compositor_32tka")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=392366968]
 environment = SubResource("Environment_vup13")

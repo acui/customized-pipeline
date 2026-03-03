@@ -1,6 +1,6 @@
 # Customized Render Pipeline
 
-This is a Godot test project that implements a customized render pipeline for Godot 4.5.
+This is a Godot test project that implements a customized render pipeline for Godot 4.6.
 
 It's based on the triangle example of the Vulkan Tutorial:
 https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Base_code
